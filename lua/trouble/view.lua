@@ -334,8 +334,8 @@ function View.create(opts)
     vim.cmd("enew")
   else
     vim.cmd("below new")
-    local pos = { bottom = "J", top = "K", left = "H", right = "L" }
-    vim.cmd("wincmd " .. (pos[config.options.position] or "K"))
+--  local pos = { bottom = "J", top = "K", left = "H", right = "L" }
+--  vim.cmd("wincmd " .. (pos[config.options.position] or "K"))
   end
   local buffer = View:new(opts)
   buffer:setup(opts)
