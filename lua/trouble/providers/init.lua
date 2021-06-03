@@ -34,13 +34,13 @@ function M.get(win, buf, cb, options)
   end
 
   provider(win, buf, function(items)
-    table.sort(items, function(a, b)
-      if a.severity == b.severity then
-        return a.lnum < b.lnum
-      else
-        return a.severity < b.severity
-      end
-    end)
+    -- table.sort(items, function(a, b)
+    --   if a.severity == b.severity then
+    --     return a.lnum < b.lnum
+    --   else
+    --     return a.severity < b.severity
+    --   end
+    -- end)
     cb(items)
   end, options)
 end
