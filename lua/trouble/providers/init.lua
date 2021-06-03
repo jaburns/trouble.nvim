@@ -34,14 +34,30 @@ function M.get(win, buf, cb, options)
   end
 
   provider(win, buf, function(items)
-    -- table.sort(items, function(a, b)
-    --   if a.severity == b.severity then
-    --     return a.lnum < b.lnum
-    --   else
-    --     return a.severity < b.severity
-    --   end
-    -- end)
-    cb(items)
+    -- 1: Error, 2: Warning, 3: Info, 4: Hint
+    -- We're trying to keep the hints sorted underneath the errors and warnings 
+    -- they arrive with while still surfacing errors above warnings above infos
+    local errors = {}
+    local warnings = {}
+    local infos = {}
+
+    local cur_bucket = infos
+    for i, item in pairs(items) do
+      if item.severity == 1 then
+        cur_bucket = errors
+      elseif item.severity == 2 then
+        cur_bucket = warnings
+      elseif item.severity == 3 then
+        cur_bucket = infos
+      end
+      table.insert(cur_bucket, item)
+    end
+
+    local result = {}
+    for i, x in pairs(errors) do table.insert(result, x) end
+    for i, x in pairs(warnings) do table.insert(result, x) end
+    for i, x in pairs(infos) do table.insert(result, x) end
+    cb(result)
   end, options)
 end
 
